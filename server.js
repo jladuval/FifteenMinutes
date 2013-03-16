@@ -16,7 +16,7 @@ server.get('/hello.txt', function(req, res){
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
-UserSchema = new Schema({
+var UserSchema = new Schema({
   'title': { type: String, index: true },
   'data': String,
   'tags': [String],
@@ -26,7 +26,7 @@ UserSchema = new Schema({
 var User = mongoose.model('user', UserSchema);
 
 var user = new User();
-user.title = "TEST TITLE";
+user.title = "TEST TITLE2";
 user.save();
 
 

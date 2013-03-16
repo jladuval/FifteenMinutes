@@ -15,3 +15,5 @@
 {"ts":1363387283035,"patch":[[{"diffs":[[0,"goose');"],[1,"\nvar db = mongoose.connect('mongodb://mongo_jacob:Horsecruncher@widmore.mongohq.com:10000/fifteenmins')"],[0,"\n\nvar se"]],"start1":61,"start2":61,"length1":16,"length2":119}]],"length":905,"saved":false}
 {"contributors":[],"silentsave":false,"ts":1363387300617,"patch":[[{"diffs":[[0,"enmins')"],[1,";"],[0,"\n\nvar se"]],"start1":164,"start2":164,"length1":16,"length2":17}]],"length":906,"saved":false}
 {"ts":1363387335859,"patch":[[{"diffs":[[0,");\n\n"],[-1,"//Define Collection\nmongoose.model('Document', User);\n\n\n"],[0,"var "]],"start1":725,"start2":725,"length1":64,"length2":8}]],"length":850,"saved":false}
+{"contributors":[],"silentsave":false,"ts":1363396736886,"patch":[[{"diffs":[[0,"ectId;\n\n"],[1,"var "],[0,"UserSche"]],"start1":540,"start2":540,"length1":16,"length2":20}]],"length":854,"saved":false}
+{"ts":1363396740487,"patch":[[{"diffs":[[0,"ST TITLE"],[1,"2"],[0,"\";\nuser."]],"start1":772,"start2":772,"length1":16,"length2":17}]],"length":855,"saved":false}
