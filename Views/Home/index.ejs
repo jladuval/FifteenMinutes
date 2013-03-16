@@ -1,12 +1,14 @@
 <html>
-    <body style="background-color:#cccc77">
+    <head>
+        <link href="/Styles/site.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
         Login<br>
         <table>
-            <form method="GET" action="/">
-                <tr><td>Username:</td><td><input type="text" name="user"></td></tr>
-                <tr><td>Password:</td><td><input type="password" name="pass"></td></tr>
-                <tr><td></td><td><input type="submit" name="submit" value="Login"></td></tr>
-            </form>
+            <form method="POST" action="/">
+                <textarea id="Sentence" name="storyStart" rows="4" cols="40"></textarea>
+                <input type="submit" value = "Submit"/>
+            </form>            
         </table>
     </body>
 </html>

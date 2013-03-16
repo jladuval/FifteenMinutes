@@ -3,10 +3,14 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
-exports.User = 
-new Schema({
-  'title': { type: String, index: true },
-  'data': String,
-  'tags': [String],
-  'user_id': ObjectId
-});
+exports.Story = 
+    new Schema({
+      id: { type: Number, index: true },
+      sentences: {
+            sentence : {
+                text : String,
+                order: Number
+            }
+      },
+      ended: Boolean
+    });

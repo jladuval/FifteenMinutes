@@ -23,3 +23,7 @@
 {"ts":1363427725933,"patch":[[{"diffs":[[0,"er('"],[-1,"Home/"],[0,"inde"]],"start1":134,"start2":134,"length1":13,"length2":8}]],"length":344,"saved":false}
 {"ts":1363427756327,"patch":[[{"diffs":[[0,"render('"],[1,"../Home/"],[0,"index.ej"]],"start1":130,"start2":130,"length1":16,"length2":24}]],"length":352,"saved":false}
 {"ts":1363427813955,"patch":[[{"diffs":[[0,"der('../"],[1,"Views/"],[0,"Home/ind"]],"start1":133,"start2":133,"length1":16,"length2":22}]],"length":358,"saved":false}
+{"contributors":[],"silentsave":false,"ts":1363476595204,"patch":[[{"diffs":[[0,"it();\n};"],[1,"\n\nexports.PostHome = function(req, res){\n    console.log(req.body.sentence);\n}"]],"start1":350,"start2":350,"length1":8,"length2":86}]],"length":436,"saved":false}
+{"ts":1363476631161,"patch":[[{"diffs":[[0,"body"],[-1,".sentence"],[0,");\n}"]],"start1":419,"start2":419,"length1":17,"length2":8}]],"length":427,"saved":false}
+{"ts":1363478046719,"patch":[[{"diffs":[[0,"(req"],[-1,".body"],[0,");\n}"]],"start1":414,"start2":414,"length1":13,"length2":8}]],"length":422,"saved":false}
+{"ts":1363478184673,"patch":[[{"diffs":[[0,"t:false\n"],[1,"    "],[0,"});\n  \n/"]],"start1":175,"start2":175,"length1":16,"length2":20}]],"length":426,"saved":false}

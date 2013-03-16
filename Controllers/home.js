@@ -4,7 +4,7 @@ var transaction = require('../DB/transaction');
 exports.GetHome = function(req, res){
  res.render('../Views/Home/index.ejs', {
     layout:false
-});
+    });
   
 //  transaction.Add(function(){
 //      var user = new models.User();
@@ -14,3 +14,7 @@ exports.GetHome = function(req, res){
 //  
 //  transaction.Commit();
 };
+
+exports.PostHome = function(req, res){
+    console.log(req);
+}
