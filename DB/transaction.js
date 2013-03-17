@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 var models = require('./models');
 
-var connectToDb = function(){
-    mongoose.connect('mongodb://mongo_jacob:Horsecruncher@widmore.mongohq.com:10000/fifteenmins');
-};
+
+mongoose.connect('mongodb://mongo_jacob:Horsecruncher@widmore.mongohq.com:10000/fifteenmins');
+
 
 var closeConnectionToDb = function(){
     mongoose.connection.close();
@@ -16,13 +16,10 @@ var add = function(query){
 }
 
 var commit = function(){
-    connectToDb();
-    
+
     for (var i = 0; i < actions.length; i++) {
         actions[i]();
     }
-    
-    closeConnectionToDb();
 }
 
 exports.Add = add;
