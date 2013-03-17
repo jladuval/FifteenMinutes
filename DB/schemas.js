@@ -9,8 +9,9 @@ exports.Story =
       sentences: {
             sentence : {
                 text : String,
-                order: Number
+                order: Number,
+                ip : String
             }
       },
-      ended: Boolean
+      ended: {type : Boolean, default : false}
     });

@@ -2,19 +2,17 @@ var models = require('../DB/models');
 var transaction = require('../DB/transaction');
 
 exports.GetHome = function(req, res){
- res.render('../Views/Home/index.ejs', {
-    layout:false
+    res.render('../Views/Home/index.ejs', {
+        layout:false
     });
-  
-//  transaction.Add(function(){
-//      var user = new models.User();
-//      user.title = "TEST TITLE5";
-//      user.save();
-//  });
-//  
-//  transaction.Commit();
 };
 
 exports.PostHome = function(req, res){
-    console.log(req);
+    transaction.Add(function(){
+        var story = new models.Story();
+        story.sentences = [{text: req.body.sentence, ip : "12345", order : 1}];
+        story.save()
+    });  
+    transaction.Commit();
+    res.send(req.body);
 }

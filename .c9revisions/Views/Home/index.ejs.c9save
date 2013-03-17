@@ -16,3 +16,4 @@
 {"ts":1363478000042,"patch":[[{"diffs":[[0,"od=\""],[-1,"GE"],[1,"POS"],[0,"T\" a"]],"start1":178,"start2":178,"length1":10,"length2":11}]],"length":403,"saved":false}
 {"ts":1363478021655,"patch":[[{"diffs":[[0,"    "],[-1,"        </form>\r\n"],[0,"    "]],"start1":291,"start2":291,"length1":25,"length2":8},{"diffs":[[0,"\"Submit\"/>\r\n"],[1,"            </form>\r\n            \r\n"],[0,"        </ta"]],"start1":336,"start2":336,"length1":24,"length2":59}]],"length":421,"saved":false}
 {"ts":1363478024197,"patch":[[{"diffs":[[0," </form>"],[-1,"\r\n"],[0,"        "]],"start1":359,"start2":359,"length1":18,"length2":16}]],"length":419,"saved":false}
+{"contributors":[],"silentsave":false,"ts":1363478840608,"patch":[[{"diffs":[[0,"rea "],[-1,"id=\"S"],[1,"name=\"s"],[0,"entence\""],[-1," name=\"storyStart\""],[0," row"]],"start1":223,"start2":223,"length1":39,"length2":23}]],"length":403,"saved":false}
