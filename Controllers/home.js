@@ -3,7 +3,7 @@ var transaction = require('../DB/transaction');
 
 exports.GetHome = function(req, res){
     transaction.Add(function(){
-        getRandomStory(function(data){
+        getRandomStory(function(err, data){
             if(data === null){
                 var story = new models.Story();
                 story.setup();
@@ -44,23 +44,14 @@ var renderHome = function(res, objectId, firstSentences){
 var getRandomStory = function(callback){
     var rand = Math.random();
     var story = models.Story;
-    var findLessThan = 
-        function(){
-            story.findOne( { random : { $lte : rand } },
-                'sentences __id', 
-                function(err, result){
-                    callback(result);
-                });
-        }
-    story.findOne( { random : { $gte : rand } }, 
-        'sentences __id', 
-        function(err, result){            
+    var query =  story.findOne().select('sentences __id');            
+    
+    query.where('random').gt(rand).exec(function(err, result){            
             if(result === null){
-                findLessThan();
+                query.where('random').lt(rand).exec(callback);
             }
             else{
-               callback(result);
+               callback(err, result);
             }
-        }
-    );
+    });
 };
