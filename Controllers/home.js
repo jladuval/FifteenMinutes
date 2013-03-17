@@ -1,6 +1,5 @@
 var models = require('../DB/models');
 var transaction = require('../DB/transaction');
-var $ = require('jquery-deferred');
 
 exports.GetHome = function(req, res){
     res.render('../Views/Home/index.ejs', {

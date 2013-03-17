@@ -96,3 +96,4 @@
 {"ts":1363486938937,"patch":[[{"diffs":[[0,"a){\n"],[-1,"            console.log(\"things\");\n"],[0,"    "]],"start1":617,"start2":617,"length1":43,"length2":8}]],"length":1284,"saved":false}
 {"ts":1363486956495,"patch":[[{"diffs":[[0,"esult){ "],[-1,"\n"],[0,"        "]],"start1":901,"start2":901,"length1":17,"length2":16},{"diffs":[[0,"    "],[-1," console.log(result);"],[0,"\n   "]],"start1":916,"start2":916,"length1":29,"length2":8}]],"length":1262,"saved":false}
 {"ts":1363486991682,"patch":[[{"diffs":[[0,"   \n"],[-1,"//    $.when(getRandomStory()).then(function(data){\n//       res.send(data); \n//    });\n    \n"],[0,"    "]],"start1":453,"start2":453,"length1":101,"length2":8}]],"length":1169,"saved":false}
+{"ts":1363487040587,"patch":[[{"diffs":[[0,"n');"],[-1,"\nvar $ = require('jquery-deferred');"],[0,"\n\nex"]],"start1":81,"start2":81,"length1":44,"length2":8}]],"length":1133,"saved":false}
