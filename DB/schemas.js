@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
-
-exports.Story = 
+    
+var story =  
     new Schema({
       id: { type: Number, index: true },
       sentences: {
@@ -13,5 +13,13 @@ exports.Story =
                 ip : String
             }
       },
-      ended: {type : Boolean, default : false}
+      ended: {type : Boolean, default : false},
+      random: Number //  Yes, this is horrible. MongoDB is a little silly in this regard. See here http://cookbook.mongodb.org/patterns/random-attribute/ 
     });
+
+story.methods.setup = function(){
+    this.random = Math.random();
+}
+
+exports.Story = story;
+    
