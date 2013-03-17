@@ -6,13 +6,11 @@ var Schema = mongoose.Schema,
 var story =  
     new Schema({
       id: { type: Number, index: true },
-      sentences: {
-            sentence : {
-                text : String,
-                order: Number,
-                ip : String
-            }
-      },
+      sentences: [{
+        text : String,
+        order: Number,
+        ip : String
+        }],
       ended: {type : Boolean, default : false},
       random: Number //  Yes, this is horrible. MongoDB is a little silly in this regard. See here http://cookbook.mongodb.org/patterns/random-attribute/ 
     });
