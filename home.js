@@ -26,15 +26,19 @@ exports.PostHome = function(req, res){
         models.Story.findOne()
             .where('_id').equals(id)
             .exec(function(err, story){
-                if(story && story.sentences){        
-                    story.sentences.push({text: req.body.sentence, ip : req.connection.remoteAddress, order : story.sentencecount});
-                    story.sentencecount++;
-                    story.save();
-                }
-                else{
-                    console.log(err);
-                }
-                renderStory(res);
+                console.log(story);
+//                if(story !== null){        
+////                    story.sentences.push({text: req.body.sentence, ip : req.connection.remoteAddress, order : story.sentenceCount});
+////                    story.sentenceCount += 1;
+////                    story.save();
+//                    console.log('1');
+//                    renderStory(res);
+//                }
+//                else{
+//                    console.log(err);
+//                    renderStory(res);
+//                }
+//                
             });
         
     });
@@ -48,9 +52,10 @@ var renderHome = function(res, objectId, firstSentences){
     });
 };
 
-var renderStory = function(res){
+var renderStory = function(res, sentences){
     res.render('../Views/Story/index.ejs', {
         layout:false,
+        locals: { sentences : sentences }
     });
 };
 
