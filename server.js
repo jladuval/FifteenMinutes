@@ -1,8 +1,11 @@
 var express = require('express');
+var engine = require('ejs-locals');
 
 var server = express();
 
 server.use(express.bodyParser());
+server.engine('ejs', engine);
+server.set('view engine', 'ejs');
 
 server.use(express.static(__dirname + '/Public'));
 

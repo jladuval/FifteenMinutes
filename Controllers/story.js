@@ -8,21 +8,21 @@ exports.GetIndex = function(req, res){
         var ip = req.connection.remoteAddress;
         models.Story.findOne()
             .where('_id').equals(id)
+            .where('sentences.ip').equals(ip)
             .exec(function(err, story){
-                if(story){
-                    renderStory(res, story.sentences);                    
+                if(err){
+                   console.log(err);
                 }
                 else{
-                    console.log('error1');                   
+                    renderStory(res, story.sentences, story.title);                      
                 }
             });
     });
     transaction.Commit();
 };
 
-var renderStory = function(res, allsentences){
+var renderStory = function(res, allsentences, title){
     res.render('../Views/Story/index.ejs', {
-        layout:false,
-        locals: { sentences : allsentences }
+        locals: { sentences : allsentences, title: title }
     });
 };

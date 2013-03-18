@@ -1,16 +1,17 @@
-<html>
-    <head>
-        <link href="/Styles/site.css" rel="stylesheet" type="text/css" />
-    </head>
-    <body>
-        <%= objectId %><br>
-        <%= sentences %>
-        <table>
-            <form method="POST" action="/">
-                <input type="text" name="sentence" />
-                <input type = "hidden" value = "<%= objectId %>" name="objectId" />
-                <input type="submit" value = "Submit"/>
-            </form>            
-        </table>
-    </body>
-</html>
+<% layout('../Shared/layout') -%>
+
+<form method="POST" action="/">
+    <% if(sentences != null && sentences.length != 0){ %>
+        <ul>
+          <% sentences.forEach(function(sentence){ %>
+            <li><%= sentence.text %></li>
+          <% }); %>
+        </ul>
+    <% } else { %>    
+         <input type="text" name="title" />
+    <% } %>
+        <input type="text" name="sentence" />
+        <input type = "hidden" value = "<%= objectId %>" name="objectId" />
+        <input type="submit" value = "Submit"/>
+</form>            
+    

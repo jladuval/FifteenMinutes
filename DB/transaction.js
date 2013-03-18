@@ -12,15 +12,15 @@ var closeConnectionToDb = function(){
 var actions = [];
 
 var add = function(query){
-    actions.push(query)
-}
+    actions.push(query);
+};
 
 var commit = function(){
-
     for (var i = 0; i < actions.length; i++) {
         actions[i]();
     }
-}
+    actions = [];
+};
 
 exports.Add = add;
 exports.Commit = commit;

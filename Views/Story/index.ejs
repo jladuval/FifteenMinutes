@@ -1,13 +1,7 @@
-<html>
-    <head>
-        <link href="/Styles/site.css" rel="stylesheet" type="text/css" />
-    </head>
-    <body>
-        STORY TIME
-        <ul>
-          <% sentences.forEach(function(sentence){ %>
-            <li><%= sentence.text %></li>
-          <% }); %>
-        </ul>
-    </body>
-</html>
+<% layout('../Shared/layout') -%>
+<%= title %>
+<ul>
+  <% sentences.forEach(function(sentence){ %>
+    <li><%= sentence.text %></li>
+  <% }); %>
+</ul>    

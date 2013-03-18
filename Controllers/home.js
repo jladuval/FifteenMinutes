@@ -8,6 +8,7 @@ exports.GetHome = function(req, res){
             if(data === null){
                 var story = new models.Story();
                 story.setup();
+                story.intialteller = req.connection.remoteAddress;
                 story.save(function(){
                     renderHome(res, story._id, null);
                 });
@@ -29,8 +30,13 @@ exports.PostHome = function(req, res){
             .where('_id').equals(id)
             .exec(function(err, story){
                 if(story){
-                    console.log('post');
-                    story.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
+                    if(story.intialteller == ip && story.sentencecount === 0 && req.body.title !== null){
+                        story.title = req.body.title;
+                        story.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
+                    }
+                    else{
+                        story.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
+                    }
                     story.sentencecount++;
                     story.save();
                 }
@@ -45,7 +51,6 @@ exports.PostHome = function(req, res){
 
 var renderHome = function(res, objectId, firstSentences){
     res.render('../Views/Home/index.ejs', {
-        layout:false,
         locals: { objectId : objectId, sentences : firstSentences }
     });
 };
