@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 
-var Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId;
+var Schema = mongoose.Schema;
     
 var story =  
     new Schema({
@@ -18,7 +17,7 @@ var story =
 
 story.methods.setup = function(){
     this.random = Math.random();
-}
+};
 
 exports.Story = story;
     

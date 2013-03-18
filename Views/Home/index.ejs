@@ -7,7 +7,7 @@
         <%= sentences %>
         <table>
             <form method="POST" action="/">
-                <textarea name="sentence" rows="4" cols="40"></textarea>
+                <input type="text" name="sentence" />
                 <input type = "hidden" value = "<%= objectId %>" name="objectId" />
                 <input type="submit" value = "Submit"/>
             </form>            

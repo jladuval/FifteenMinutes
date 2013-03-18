@@ -21,25 +21,26 @@ exports.GetHome = function(req, res){
 };
 
 exports.PostHome = function(req, res){
+    var id = new ObjectId(req.body.objectId);    
     transaction.Add(function(){
         var id = new ObjectId(req.body.objectId);
+        var ip = req.connection.remoteAddress;
         models.Story.findOne()
             .where('_id').equals(id)
             .exec(function(err, story){
-                if(story && story.sentences){        
-                    story.sentences.push({text: req.body.sentence, ip : req.connection.remoteAddress, order : story.sentencecount});
+                if(story){
+                    console.log('post');
+                    story.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
                     story.sentencecount++;
                     story.save();
-                    renderStory(res, story.sentences);
                 }
                 else{
-                    console.log(err);
-                    renderHome(res, id, null);
+                    console.log('error');             
                 }
             });
-        
     });
     transaction.Commit();
+    res.redirect('/Story?id=' + id);
 };
 
 var renderHome = function(res, objectId, firstSentences){
@@ -49,15 +50,7 @@ var renderHome = function(res, objectId, firstSentences){
     });
 };
 
-var renderStory = function(res, allsentences){
-    res.render('../Views/Story/index.ejs', {
-        layout:false,
-        locals: { sentences : allsentences }
-    });
-};
-
 var getRandomStory = function(callback, ip){
-    console.log(ip);
     var rand = Math.random();
     var story = models.Story;
     var query =  story.findOne()
