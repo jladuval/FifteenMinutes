@@ -9,8 +9,8 @@ exports.GetHome = function(req, res){
                 var story = new models.Story();
                 story.setup();
                 story.save(function(){
-                    renderHome(res, story.id, null);
-                });            
+                    renderHome(res, story._id, null);
+                });
             }
             else{
                 renderHome(res, data._id, data.sentences);
@@ -30,11 +30,12 @@ exports.PostHome = function(req, res){
                     story.sentences.push({text: req.body.sentence, ip : req.connection.remoteAddress, order : story.sentencecount});
                     story.sentencecount++;
                     story.save();
+                    renderStory(res, story.sentences);
                 }
                 else{
                     console.log(err);
+                    renderHome(res, id, null);
                 }
-                renderStory(res);
             });
         
     });
@@ -48,25 +49,28 @@ var renderHome = function(res, objectId, firstSentences){
     });
 };
 
-var renderStory = function(res){
+var renderStory = function(res, allsentences){
     res.render('../Views/Story/index.ejs', {
         layout:false,
+        locals: { sentences : allsentences }
     });
 };
 
 var getRandomStory = function(callback, ip){
+    console.log(ip);
     var rand = Math.random();
     var story = models.Story;
-    var query =  story.findOne().select('sentences __id');            
+    var query =  story.findOne()
+        .select('sentences __id')
+        .where('sentences.ip').ne(ip)
+        .where('ended').equals(false);            
     
     query
-        .where('random').gt(rand)
-        //.where('sentences.sentence.ip').ne(ip)
+        .where('random').gt(rand)        
         .exec(function(err, result){            
             if(result === null){
                 query
-                    .where('random').lt(rand)
-                    //.where('sentences.sentence.Ip').ne(ip)
+                    .where('random').lt(rand)                    
                     .exec(callback);
             }
             else{
