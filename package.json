@@ -1,0 +1,29 @@
+{
+  "name": "strikeaprose",
+  "version": "0.0.0",
+  "description": "Create a story with your friends",
+  "main": "server.js",
+  "dependencies": {
+    "express": "~3.1.0",
+    "ejs": "~0.8.3",
+    "ejs-locals": "~1.0.2",
+    "mongoose": "~3.5.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jladuval/FifteenMinutes.git"
+  },
+  "keywords": [
+    "story",
+    "fun"
+  ],
+  "author": "jladuval",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "fbf3cf54b206690b53ad2132154ecdc37b95b61e"
+}
