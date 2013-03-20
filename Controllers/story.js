@@ -13,7 +13,7 @@ exports.GetIndex = function(req, res){
 				.exec(function(err, story){
 					if(err || !story){
 					   console.log(err);
-					   res.redirect('/');
+					   res.redirect('http://google.com');
 					}
 					else{
 						renderStory(res, story.sentences, story.title);                      
@@ -22,7 +22,7 @@ exports.GetIndex = function(req, res){
 		});
 		transaction.Commit();
 	} else {
-		res.redirect('/');
+		res.redirect('http://bing.com');
 	}
 };
 
