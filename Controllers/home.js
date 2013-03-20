@@ -5,7 +5,6 @@ var ObjectId = require('mongoose').Types.ObjectId;
 exports.GetHome = function(req, res){
     transaction.Add(function(){
         getRandomStory(function(err, data){
-		console.log(data);
             if(data === null){
                 var story = new models.Story();
                 story.setup();
@@ -15,7 +14,11 @@ exports.GetHome = function(req, res){
                 });
             }
             else{
-                renderHome(res, data._id, data.sentences, data.title);
+				var sentences = data.sentences;
+				if(sentences && sentences.length > 3 ){
+					sentences = sentences.splice(sentences.length - 3, sentences.length);
+				}
+                renderHome(res, data._id, sentences, data.title);
             }
         }, req.connection.remoteAddress);        
     });
@@ -23,7 +26,7 @@ exports.GetHome = function(req, res){
 };
 
 exports.PostHome = function(req, res){
-    var id = new ObjectId(req.body.objectId);    
+    var id = new ObjectId(req.body.objectId);
     transaction.Add(function(){
         var ip = req.connection.remoteAddress;
         models.Story.findOne()
@@ -37,6 +40,7 @@ exports.PostHome = function(req, res){
                     else{
                         story.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
                     }
+					story.ended = req.body.submit != "Submit";
                     story.sentencecount++;
                     story.save();
                 }
@@ -57,21 +61,20 @@ var renderHome = function(res, objectId, firstSentences, title){
 
 var getRandomStory = function(callback, ip){
     var rand = Math.random() * 10000000;
-	console.log(rand);
     var story = models.Story;           
     
     story.findOne()
         .select('sentences __id title')
         //.where('sentences.ip').ne(ip)
-        .where('ended').equals(false)
-        .where('random').gt(rand)        
+		.where('ended').equals(false)
+        .where('random').lt(rand)        
         .exec(function(err, result){            
             if(result === null){
                 story.findOne()
 					.select('sentences __id title')
 					//.where('sentences.ip').ne(ip)
 					.where('ended').equals(false)
-                    .where('random').lt(rand)                    
+                    .where('random').gt(rand)                    
                     .exec(callback);
             }
             else{

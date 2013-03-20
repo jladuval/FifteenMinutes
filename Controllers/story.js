@@ -16,7 +16,6 @@ exports.GetIndex = function(req, res){
 					   res.redirect('/');
 					}
 					else{
-						console.log(story);
 						renderStory(res, story.sentences, story.title);                      
 					}
 				});
