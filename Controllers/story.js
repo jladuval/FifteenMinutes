@@ -11,9 +11,9 @@ exports.GetIndex = function(req, res){
 				.where('_id').equals(id)
 				.where('sentences.ip').equals(ip)
 				.exec(function(err, story){
-					if(err || !story){
+					if(err || story === null){
 					   console.log(err);
-					   res.redirect('http://google.com');
+					   res.redirect('/' + err);
 					}
 					else{
 						renderStory(res, story.sentences, story.title);                      
@@ -22,7 +22,7 @@ exports.GetIndex = function(req, res){
 		});
 		transaction.Commit();
 	} else {
-		res.redirect('http://bing.com');
+		res.redirect('/');
 	}
 };
 
