@@ -72,8 +72,7 @@ var getRandomStory = function(callback, ip){
 		var count = 
 		story
 			.count()
-			.where('ended')
-			.equals(false)
+			.where('ended').equals(false)
 			.exec(function(err, count){
 				selectStoryWithCount(callback, err, count);
 			});		
@@ -85,26 +84,15 @@ var selectStoryWithCount = function(callback, err, count){
 	if(count == 0){
 		callback(err, null);
 	} else {
-		console.log('count is ' + count);
 		var rand = Math.round(Math.floor(Math.random() * count));
-		console.log('rand is' + rand);
 		story.findOne()
 			.select('sentences __id title')
 			//.where('sentences.ip').ne(ip)
 			.where('ended').equals(false)
 			.skip(rand)
-			.exec(function(err, result){            
-				if(result === null){
-					story.findOne()
-						.select('sentences __id title')
-						//.where('sentences.ip').ne(ip)
-						.where('ended').equals(false)
-						.where('random').gt(rand)                    
-						.exec(callback);
-				}
-				else{
-				   callback(err, result);
-				}
+			.exec(function(err, result){			
+			   callback(err, result);
+			}
 		});
 	}
 }
