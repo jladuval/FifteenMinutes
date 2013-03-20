@@ -7,11 +7,13 @@ exports.GetIndex = function(req, res){
 		transaction.Add(function(){
 			var id = new ObjectId(req.query.id);
 			var ip = req.connection.remoteAddress;
-			models.Story.findOne()
-				.where('_id').equals(id)
-				.exec(function(err, story){
+			var story = models.Story;
+			story.Story.findOne()
+				.select('sentences __id title')
+				.where('__id').equals(id)
+				.exec(function(err, data){
 					if(story !== null){
-					   renderStory(res, story.sentences, story.title);
+					   renderStory(res, data.sentences, data.title);
 					}
 					else{
 						res.redirect('/' + err);						                  
