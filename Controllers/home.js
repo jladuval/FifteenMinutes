@@ -10,8 +10,8 @@ exports.GetHome = function(req, res){
             }
             else{
 				var sentences = data.sentences;
-				if(sentences && sentences.length > 3 ){
-					sentences = sentences.splice(sentences.length - 3, sentences.length);
+				if(sentences && sentences.length > 2 ){
+					sentences = sentences.splice(sentences.length - 2, sentences.length);
 				}
                 renderHome(res, data._id, sentences, data.title);
             }
@@ -48,10 +48,10 @@ exports.PostHome = function(req, res){
 					story.sentencecount++;
 					story.save();          
                 }
+				res.redirect('/Story?id=' + id);
             });
     });
     transaction.Commit();
-    res.redirect('/Story?id=' + id);
 };
 
 var renderHome = function(res, objectId, firstSentences, title){
