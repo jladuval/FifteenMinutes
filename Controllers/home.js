@@ -38,6 +38,7 @@ exports.PostHome = function(req, res){
 					story.ended = req.body.submit != "Submit";
                     story.sentencecount++;
                     story.save();
+					res.redirect('/Story?id=' + id);
                 }
                 else{
 					var story = new models.Story();
@@ -46,9 +47,12 @@ exports.PostHome = function(req, res){
 					story.intialteller = req.connection.remoteAddress;
 					story.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
 					story.sentencecount++;
-					story.save();          
+					story.save(function(err, data){
+						id = data._id;
+						res.redirect('/Story?id=' + id);
+					}); 
                 }
-				res.redirect('/Story?id=' + id);
+				
             });
     });
     transaction.Commit();
