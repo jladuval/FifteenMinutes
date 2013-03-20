@@ -80,11 +80,12 @@ var getRandomStory = function(callback, ip){
 };
 
 var selectStoryWithCount = function(callback, err, count){
+	var random = Math.random() * count;
 	var story = models.Story;
 	if(count == 0){
 		callback(err, null);
 	} else {
-		var rand = Math.round(Math.floor(Math.random() * count));
+		var rand = Math.floor(random);
 		story.findOne()
 			.select('sentences __id title')
 			//.where('sentences.ip').ne(ip)
