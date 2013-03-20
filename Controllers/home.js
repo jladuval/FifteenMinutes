@@ -92,7 +92,6 @@ var selectStoryWithCount = function(callback, err, count){
 			.skip(rand)
 			.exec(function(err, result){			
 			   callback(err, result);
-			}
-		});
+			});
 	}
 }
