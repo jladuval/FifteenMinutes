@@ -1,3 +1,43 @@
 body{
-    background-image:url('../Images/linedpaper.png');   
+    background-image:url('../Images/linedpaper.png'); 
+	margin: 0px;
+	font-family: 'Strait', sans-serif;
+}
+
+#sap-header{
+	text-align:center;
+	font-size: 800%;
+	min-height: 100px;
+	margin-top: 150px;
+	margin-bottom: 50px;
+	line-height: 100px;
+}
+
+.inputwrapper{
+	text-align:center;
+}
+
+.sentence-input {
+	width: 500px;
+	padding: 20px !important;
+	font-size: 1.8em !important;
+}
+
+.story-input::-webkit-input-placeholder {
+   padding-top: 5px !important;
+   text-align: center;
+}
+
+.title-input{
+	width: 300px;
+	font-size: 1.8em !important;
+	padding: 15px 15px 15px 15px !important;
+}
+
+.current-story{
+	margin-left:auto;
+	margin-right:auto;
+	width: 540px;
+	font-size: 1.2em;
+	margin-bottom:50px;
 }

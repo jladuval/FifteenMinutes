@@ -5,16 +5,17 @@ var ObjectId = require('mongoose').Types.ObjectId;
 exports.GetHome = function(req, res){
     transaction.Add(function(){
         getRandomStory(function(err, data){
+		console.log(data);
             if(data === null){
                 var story = new models.Story();
                 story.setup();
                 story.intialteller = req.connection.remoteAddress;
                 story.save(function(){
-                    renderHome(res, story._id, null);
+                    renderHome(res, story._id, null, null);
                 });
             }
             else{
-                renderHome(res, data._id, data.sentences);
+                renderHome(res, data._id, data.sentences, data.title);
             }
         }, req.connection.remoteAddress);        
     });
@@ -24,13 +25,12 @@ exports.GetHome = function(req, res){
 exports.PostHome = function(req, res){
     var id = new ObjectId(req.body.objectId);    
     transaction.Add(function(){
-        var id = new ObjectId(req.body.objectId);
         var ip = req.connection.remoteAddress;
         models.Story.findOne()
             .where('_id').equals(id)
             .exec(function(err, story){
                 if(story){
-                    if(story.intialteller == ip && story.sentencecount === 0 && req.body.title !== null){
+                    if(story.sentencecount === 0 && req.body.title !== null){
                         story.title = req.body.title;
                         story.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
                     }
@@ -49,25 +49,28 @@ exports.PostHome = function(req, res){
     res.redirect('/Story?id=' + id);
 };
 
-var renderHome = function(res, objectId, firstSentences){
+var renderHome = function(res, objectId, firstSentences, title){
     res.render('../Views/Home/index.ejs', {
-        locals: { objectId : objectId, sentences : firstSentences }
+        locals: { objectId : objectId, sentences : firstSentences, title: title }
     });
 };
 
 var getRandomStory = function(callback, ip){
-    var rand = Math.random();
-    var story = models.Story;
-    var query =  story.findOne()
-        .select('sentences __id')
-        .where('sentences.ip').ne(ip)
-        .where('ended').equals(false);            
+    var rand = Math.random() * 10000000;
+	console.log(rand);
+    var story = models.Story;           
     
-    query
+    story.findOne()
+        .select('sentences __id title')
+        //.where('sentences.ip').ne(ip)
+        .where('ended').equals(false)
         .where('random').gt(rand)        
         .exec(function(err, result){            
             if(result === null){
-                query
+                story.findOne()
+					.select('sentences __id title')
+					//.where('sentences.ip').ne(ip)
+					.where('ended').equals(false)
                     .where('random').lt(rand)                    
                     .exec(callback);
             }
