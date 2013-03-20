@@ -5,13 +5,8 @@ var ObjectId = require('mongoose').Types.ObjectId;
 exports.GetHome = function(req, res){
     transaction.Add(function(){
         getRandomStory(function(err, data){
-            if(data === null){
-                var story = new models.Story();
-                story.setup();
-                story.intialteller = req.connection.remoteAddress;
-                story.save(function(){
-                    renderHome(res, story._id, null, null);
-                });
+            if(data === null){                
+				renderHome(res, null, null, null);
             }
             else{
 				var sentences = data.sentences;
@@ -45,7 +40,13 @@ exports.PostHome = function(req, res){
                     story.save();
                 }
                 else{
-                    console.log('error');             
+					var story = new models.Story();
+					story.setup();
+					story.title = req.body.title;
+					story.intialteller = req.connection.remoteAddress;
+					story.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
+					story.sentencecount++;
+					story.save();          
                 }
             });
     });
@@ -60,25 +61,29 @@ var renderHome = function(res, objectId, firstSentences, title){
 };
 
 var getRandomStory = function(callback, ip){
-    var rand = Math.random() * 10000000;
-    var story = models.Story;           
-    
-    story.findOne()
-        .select('sentences __id title')
-        //.where('sentences.ip').ne(ip)
-		.where('ended').equals(false)
-        .where('random').lt(rand)        
-        .exec(function(err, result){            
-            if(result === null){
-                story.findOne()
-					.select('sentences __id title')
-					//.where('sentences.ip').ne(ip)
-					.where('ended').equals(false)
-                    .where('random').gt(rand)                    
-                    .exec(callback);
-            }
-            else{
-               callback(err, result);
-            }
-    });
+	if(Math.random() > 0.9){
+		callback(null, null);
+	}else{
+		var rand = Math.random() * 10000000;
+		var story = models.Story;           
+		
+		story.findOne()
+			.select('sentences __id title')
+			//.where('sentences.ip').ne(ip)
+			.where('ended').equals(false)
+			.where('random').lt(rand)        
+			.exec(function(err, result){            
+				if(result === null){
+					story.findOne()
+						.select('sentences __id title')
+						//.where('sentences.ip').ne(ip)
+						.where('ended').equals(false)
+						.where('random').gt(rand)                    
+						.exec(callback);
+				}
+				else{
+				   callback(err, result);
+				}
+		});
+	}
 };

@@ -1,5 +1,5 @@
 <% layout('../Shared/layout') -%>
-<form method="POST" action="/">
+<form method="POST" action="/" id="storyform">
     <% if(sentences != null && sentences.length != 0){ %>
 		<% block('header', "Continue the story") -%>
 		<div class="current-story">
@@ -12,14 +12,16 @@
 	<% block('header', "Start a story") -%>
 	<div class="row-fluid inputwrapper">
 		<div class="span12">
-			<input class="title-input story-input" type="text" name="title" placeholder = "Give this story a title"/>
+			<input class="title-input story-input" maxlength="45" type="text" name="title" placeholder = "Give this story a title"/>
 		 </div>
 	 </div>
     <% } %>
 	<div class="row-fluid inputwrapper">
 		<div class="span12">
-			<input type="text" class="sentence-input story-input"  name="sentence" placeholder = "Add a line to this story" />
+			<input type="text" class="sentence-input story-input required" maxlength="300" name="sentence" placeholder = "Add a line to this story" />
+			<% if(objectId){ %>
 			<input type = "hidden" value = "<%= objectId %>" name="objectId" />
+			<% } %>
 		 </div>
 	</div>
 	<div class="row-fluid inputwrapper">
@@ -33,5 +35,8 @@
 		 </div>
 	</div>
         
-</form>            
+</form>
+<script src="http://code.jquery.com/jquery-latest.js"></script>           
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.7/jquery.validate.js"></script>
+<script type="text/javascript" src="/Js/stories.js"></script> 
     
