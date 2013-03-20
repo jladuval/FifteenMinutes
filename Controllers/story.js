@@ -11,11 +11,11 @@ exports.GetIndex = function(req, res){
 				.where('_id').equals(id)
 				.where('sentences.ip').equals(ip)
 				.exec(function(err, story){
-					if(err || story === null){
-					   res.redirect('/' + err);
+					if(story !== null){
+					   renderStory(res, story.sentences, story.title);
 					}
 					else{
-						renderStory(res, story.sentences, story.title);                      
+						res.redirect('/' + err);						                  
 					}
 				});
 		});
