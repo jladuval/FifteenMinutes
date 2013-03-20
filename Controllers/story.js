@@ -8,9 +8,9 @@ exports.GetIndex = function(req, res){
 			var id = new ObjectId(req.query.id);
 			var ip = req.connection.remoteAddress;
 			var story = models.Story;
-			story.Story.findOne()
+			story.findOne()
 				.select('sentences __id title')
-				.where('__id').equals(id)
+				.where('_id').equals(id)
 				.exec(function(err, data){
 					if(story !== null){
 					   renderStory(res, data.sentences, data.title);
