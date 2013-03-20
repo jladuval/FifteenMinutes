@@ -12,7 +12,6 @@ exports.GetIndex = function(req, res){
 				.where('sentences.ip').equals(ip)
 				.exec(function(err, story){
 					if(err || story === null){
-					   console.log(err);
 					   res.redirect('/' + err);
 					}
 					else{
