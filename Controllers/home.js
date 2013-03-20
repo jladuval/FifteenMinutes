@@ -80,7 +80,7 @@ var getRandomStory = function(callback, ip){
 };
 
 var selectStoryWithCount = function(callback, err, count){
-	var random = Math.random() * count;
+	var random = Math.round(Math.random() * count);
 	var story = models.Story;
 	if(count == 0){
 		callback(err, null);
