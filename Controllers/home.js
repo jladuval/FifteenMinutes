@@ -68,14 +68,31 @@ var getRandomStory = function(callback, ip){
 	if(Math.random() > 0.9){
 		callback(null, null);
 	}else{
-		var rand = Math.random() * 10000000;
 		var story = models.Story;           
-		
+		var count = 
+		story
+			.count()
+			.where('ended')
+			.equals(false)
+			.exec(function(err, count){
+				selectStoryWithCount(callback, err, count);
+			});		
+	}
+};
+
+var selectStoryWithCount = function(callback, err, count){
+	var story = models.Story;
+	if(count == 0){
+		callback(err, null);
+	} else {
+		console.log('count is ' + count);
+		var rand = Math.round(Math.floor(Math.random() * count));
+		console.log('rand is' + rand);
 		story.findOne()
 			.select('sentences __id title')
 			//.where('sentences.ip').ne(ip)
 			.where('ended').equals(false)
-			.where('random').lt(rand)        
+			.skip(rand)
 			.exec(function(err, result){            
 				if(result === null){
 					story.findOne()
@@ -90,4 +107,4 @@ var getRandomStory = function(callback, ip){
 				}
 		});
 	}
-};
+}

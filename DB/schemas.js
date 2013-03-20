@@ -18,7 +18,7 @@ var story =
     });
 
 story.methods.setup = function(){
-    this.random = Math.random() * 10000000;
+    this.random = Math.round(Math.random() * 10000000);
 };
 
 exports.Story = story;
