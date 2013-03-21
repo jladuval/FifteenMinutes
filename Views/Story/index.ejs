@@ -1,5 +1,8 @@
 <% layout('../Shared/layout') -%>
 <% block('header', "Read the story") -%>
+<div class="right-link">
+	<a href="/List?page=1">Read finished stories</a>
+</div>
 <div class="current-story">
 	<h2><%= title %></h2>
 	<% sentences.forEach(function(sentence){ %>

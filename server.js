@@ -17,5 +17,8 @@ server.post('/',home.PostHome);
 var story = require('./Controllers/story');
 server.get('/Story', story.GetIndex);
 
+var list = require('./Controllers/list');
+server.get('/List', list.GetIndex);
+
 server.listen(process.env.PORT);
 console.log('started');

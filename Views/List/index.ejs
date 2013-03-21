@@ -1,0 +1,29 @@
+<% layout('../Shared/layout') -%>
+<% block('header', "Choose a story") -%>
+<div class="right-link">
+	<a href="/">Get back into it</a>
+</div>
+<div class="story-list">
+	<% stories.forEach(function(story){ %>
+		<div class="story-item">
+			<a href="/Story?id=<%= story._id %>"><%= story.title %></a>
+		</div>
+	<% }); %>
+	<div class="pagination">
+	  <ul>
+		<% if(currentpage > 1){ %>
+		<li><a href="/List?page=<%= currentpage - 1 %>">Prev</a></li>
+		<% } if(pages > 1){ 
+			for(var i = 1; i <= pages; i++){
+				if(i == currentpage){%>
+					<li class="active"><a href="List?page=<%= i %>"><%= i %></a></li>
+				<% } else { %>
+					<li><a href="List?page=<%= i %>"><%= i %></a></li>
+			<%	}
+			}
+		} if(currentpage < pages){%>
+			<li><a href="/List?page=<%= ++currentpage %>">Next</a></li>
+		<%	} %>
+	  </ul>
+	</div>
+</div>

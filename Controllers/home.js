@@ -35,7 +35,10 @@ exports.PostHome = function(req, res){
                     else{
                         story.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
                     }
-					story.ended = req.body.submit != "Submit";
+					if(req.body.submit != "Submit"){
+						story.ended = true;
+						story.endeddate = new Date();
+					}
                     story.sentencecount++;
                     story.save();
 					res.redirect('/Story?id=' + id);
