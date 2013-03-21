@@ -2,7 +2,7 @@
 <div class="right-link">
 	<a href="/List?page=1">Read finished stories</a>
 </div>
-<form method="POST" action="/" id="storyform">
+<form method="POST" action="/" id="storyform" autocomplete="off">
     <% if(sentences != null && sentences.length != 0){ %>
 		<% block('header', "Continue the story") -%>
 		<div class="current-story">
