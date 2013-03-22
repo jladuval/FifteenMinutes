@@ -13,7 +13,8 @@ var story =
       sentencecount : {type : Number, default : 0 },
       intialteller: String,
       title: String,
-	  endeddate: Date,
+      endeddate: Date,
+      lastserved: Date,
       ended: {type : Boolean, default : false},
       random: Number //  Yes, this is horrible. MongoDB is a little silly in this regard. See here http://cookbook.mongodb.org/patterns/random-attribute/ 
     });
