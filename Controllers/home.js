@@ -12,10 +12,16 @@ exports.GetHome = function(req, res){
             }
             else{
 				var sentences = data.sentences;
-				if(sentences && sentences.length > sentenceHomeCount ){
-					sentences = sentences.splice(sentences.length - sentenceHomeCount, sentences.length);
+                var sortedSentences = sentences.sort(function(a, b){
+                    return a.order-b.order;
+                });
+                var viewSentences;
+				if(sortedSentences && sortedSentences.length > sentenceHomeCount){
+					viewSentences = sortedSentences.splice(sortedSentences.length - sentenceHomeCount, sortedSentences.length);
+				}else{
+                    viewSentences = sortedSentences;
 				}
-                renderHome(res, data._id, sentences, data.title);
+                renderHome(res, data._id, viewSentences, data.title);
             }
         }, req.connection.remoteAddress);        
     });
@@ -99,15 +105,18 @@ var selectStoryWithCount = function(callback, err, count, before){
 	} else {
 		var rand = Math.floor(random);
 		story.findOne()
-			.select('sentences __id title')
+			.select('sentences __id title lastserved')
 			.where('ended').equals(false)
             .or([{ lastserved: null }, { lastserved: {"$lte": before} }])
 			.skip(rand)
-			.exec(function(err, result){
-                callback(err, result);
+			.exec(function(err, result){                
                 if(result){
                     result.lastserved = new Date();
-                    result.save();
+                    result.save(function(err, data){
+                        callback(err, result);
+                    });
+                }else{
+                    callback(err, result);
                 }
 			});
 	}
