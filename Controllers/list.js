@@ -1,6 +1,6 @@
 var models = require('../DB/models');
-var transaction = require('../DB/transaction');
-var ObjectId = require('mongoose').Types.ObjectId;
+var transactionlib = require('../DB/transaction');
+var transaction = new transactionlib.Transaction();
 
 var pagesize = 20;
 
@@ -12,7 +12,7 @@ exports.GetIndex = function(req, res){
 			story.count()
 				.where('ended').equals('true')
 				.exec(function(err, count){
-					if(count == 0){
+					if(count === 0){
 						res.redirect('/');
 					}
 					else{
@@ -25,10 +25,10 @@ exports.GetIndex = function(req, res){
 							.limit(pagesize)						
 							.exec(function(err, data){
 								if(data !== null){
-								   renderList(res, data, page, pagecount);
+                                    renderList(res, data, page, pagecount);
 								}
-								else{
-									res.redirect('/' + err);						                  
+                                else{
+                                    res.redirect('/' + err);
 								}
 							});
 					}	

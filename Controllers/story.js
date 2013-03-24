@@ -1,22 +1,22 @@
 var models = require('../DB/models');
-var transaction = require('../DB/transaction');
+var transactionlib = require('../DB/transaction');
 var ObjectId = require('mongoose').Types.ObjectId;
+var transaction = new transactionlib.Transaction();
 
 exports.GetIndex = function(req, res){
 	if(req.query.id){
 		transaction.Add(function(){
 			var id = new ObjectId(req.query.id);
-			var ip = req.connection.remoteAddress;
 			var story = models.Story;
 			story.findOne()
 				.select('sentences __id title')
 				.where('_id').equals(id)
 				.exec(function(err, data){
 					if(story !== null){
-					   renderStory(res, data.sentences, data.title);
+                        renderStory(res, data.sentences, data.title);
 					}
 					else{
-						res.redirect('/' + err);						                  
+						res.redirect('/' + err);
 					}
 				});
 		});

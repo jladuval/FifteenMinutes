@@ -1,26 +1,19 @@
 var mongoose = require('mongoose');
-var models = require('./models');
 
 
 mongoose.connect('mongodb://mongo_jacob:Horsecruncher@widmore.mongohq.com:10000/fifteenmins');
 
+function Transaction(){
+    var actions = [];
+    this.Add = function(query){
+        actions.push(query);
+    };
+    this.Commit = function(){
+        for (var i = 0; i < actions.length; i++) {
+            actions[i]();
+        }
+        actions = [];
+    };
+}
 
-var closeConnectionToDb = function(){
-    mongoose.connection.close();
-};
-
-var actions = [];
-
-var add = function(query){
-    actions.push(query);
-};
-
-var commit = function(){
-    for (var i = 0; i < actions.length; i++) {
-        actions[i]();
-    }
-    actions = [];
-};
-
-exports.Add = add;
-exports.Commit = commit;
+exports.Transaction = Transaction;

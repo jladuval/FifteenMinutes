@@ -1,6 +1,7 @@
 var models = require('../DB/models');
-var transaction = require('../DB/transaction');
+var transactionlib = require('../DB/transaction');
 var ObjectId = require('mongoose').Types.ObjectId;
+var transaction = new transactionlib.Transaction();
 
 var sentenceHomeCount = 2;
 
