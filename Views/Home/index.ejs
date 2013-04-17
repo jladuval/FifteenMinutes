@@ -6,7 +6,7 @@
     <% if(sentences != null && sentences.length != 0){ %>
 		<% block('header', "Continue the story") -%>
 		<div class="current-story">
-			<h2>The last lines of "<%= title %>"</h2>
+			<h2>The last two lines of "<%= title %>"</h2>
 			<% sentences.forEach(function(sentence){ %>
 				<p><%= sentence.text %></p>
 			<% }); %>

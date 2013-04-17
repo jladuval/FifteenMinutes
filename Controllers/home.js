@@ -1,44 +1,36 @@
 var models = require('../DB/models');
-var transactionlib = require('../DB/transaction');
 var ObjectId = require('mongoose').Types.ObjectId;
-var transaction = new transactionlib.Transaction();
 
 var sentenceHomeCount = 2;
 
-exports.GetHome = function(req, res){
-    transaction.Add(function(){
-        getRandomStory(function(err, data){
-            if(data === null){                
-				renderHome(res, null, null, null);
-            }
-            else{
-				var sentences = data.sentences;
-                var sortedSentences = sentences.sort(function(a, b){
-                    return a.order-b.order;
-                });
-                var viewSentences;
-				if(sortedSentences && sortedSentences.length > sentenceHomeCount){
-					viewSentences = sortedSentences.splice(sortedSentences.length - sentenceHomeCount, sortedSentences.length);
-				}else{
-                    viewSentences = sortedSentences;
-				}
-                renderHome(res, data._id, viewSentences, data.title);
-            }
-        }, req.connection.remoteAddress);        
-    });
-    transaction.Commit();
+exports.GetHome = function(req, res){    
+    getRandomStory(function(err, data){
+        if(data === null){                
+			renderHome(res, null, null, null);
+        }
+        else{
+			var sentences = data.sentences;
+            var sortedSentences = sentences.sort(function(a, b){
+                return a.order-b.order;
+            });
+            var viewSentences;
+			if(sortedSentences && sortedSentences.length > sentenceHomeCount){
+				viewSentences = sortedSentences.splice(sortedSentences.length - sentenceHomeCount, sortedSentences.length);
+			}else{
+                viewSentences = sortedSentences;
+			}
+            renderHome(res, data._id, viewSentences, data.title);
+        }
+    }, req.connection.remoteAddress);
 };
 
 exports.PostHome = function(req, res){
     var id = new ObjectId(req.body.objectId);
-    transaction.Add(function(){
-        models.Story.findOne()
-            .where('_id').equals(id)
-            .exec(function(err, story){               
-				saveOrUpdateStory(err, story, req, res);
-            });
-    });
-    transaction.Commit();
+    models.Story.findOne()
+        .where('_id').equals(id)
+        .exec(function(err, story){               
+			saveOrUpdateStory(err, story, req, res);
+        });
 };
 
 var renderHome = function(res, objectId, firstSentences, title){

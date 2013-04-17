@@ -1,5 +1,8 @@
 var express = require('express');
 var engine = require('ejs-locals');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://mongo_jacob:Horsecruncher@widmore.mongohq.com:10000/fifteenmins');
 
 var server = express();
 

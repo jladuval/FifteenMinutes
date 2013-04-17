@@ -1,40 +1,35 @@
 var models = require('../DB/models');
-var transactionlib = require('../DB/transaction');
-var transaction = new transactionlib.Transaction();
 
 var pagesize = 20;
 
 exports.GetIndex = function(req, res){
 	var page = req.query.page;
 	if(page && page > 0){
-		transaction.Add(function(){
-			var story = models.Story;
-			story.count()
-				.where('ended').equals('true')
-				.exec(function(err, count){
-					if(count === 0){
-						res.redirect('/');
-					}
-					else{
-						var pagecount = Math.ceil(count/pagesize);
-						story.find()						
-							.select('_id title')
-							.where('ended').equals('true')
-							.sort('-endeddate')
-							.skip((pagesize * (page - 1)))
-							.limit(pagesize)						
-							.exec(function(err, data){
-								if(data !== null){
-                                    renderList(res, data, page, pagecount);
-								}
-                                else{
-                                    res.redirect('/' + err);
-								}
-							});
-					}	
-				});			
-		});
-		transaction.Commit();
+		var story = models.Story;
+		story.count()
+			.where('ended').equals('true')
+			.exec(function(err, count){
+				if(count === 0){
+					res.redirect('/');
+				}
+				else{
+					var pagecount = Math.ceil(count/pagesize);
+					story.find()						
+						.select('_id title')
+						.where('ended').equals('true')
+						.sort('-endeddate')
+						.skip((pagesize * (page - 1)))
+						.limit(pagesize)						
+						.exec(function(err, data){
+							if(data !== null){
+                                renderList(res, data, page, pagecount);
+							}
+                            else{
+                                res.redirect('/' + err);
+							}
+						});
+				}	
+			});	
 	} else {
 		res.redirect('/');
 	}
