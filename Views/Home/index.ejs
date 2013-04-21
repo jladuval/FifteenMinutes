@@ -31,8 +31,9 @@
 		<div class="span12">
 			<% if(sentences != null && sentences.length != 0){ %>
 				<input class="btn btn-info btn-large" name="submit" type="submit" value = "Submit"/>
-				<input id="end" class="btn btn-danger btn-large" name="submit" type="submit" value = "The End"/>
-			<%} else{ %>
+                <% if(end){ %>
+				    <input id="end" class="btn btn-danger btn-large" name="submit" type="submit" value = "The End"/>
+			<%}} else{ %>
 				<input class="btn btn-info btn-large" name="submit" type="submit" value = "Submit"/>				
 			<%} %>
 		 </div>

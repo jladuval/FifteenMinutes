@@ -6,20 +6,31 @@ var sentenceHomeCount = 2;
 exports.GetHome = function(req, res){    
     getRandomStory(function(err, data){
         if(data === null){                
-			renderHome(res, null, null, null);
+			renderHome(res, null, null, null, 0);
         }
         else{
-			var sentences = data.sentences;
-            var sortedSentences = sentences.sort(function(a, b){
-                return a.order-b.order;
+            var ip = req.connection.remoteAddress;
+            var now = new Date();
+            var minutes = 20;
+            var before = new Date(now.getTime() - minutes*60000);
+            models.Story
+            .count()
+            .where('endedip').equals(ip)
+            .where('endeddate').gte(before)
+            .exec(function(err, count){
+                var sentences = data.sentences;
+                var sortedSentences = sentences.sort(function(a, b){
+                    return a.order-b.order;
+                });
+                var viewSentences;
+                if(sortedSentences && sortedSentences.length > sentenceHomeCount){
+                    viewSentences = sortedSentences.splice(sortedSentences.length - sentenceHomeCount, sortedSentences.length);
+                }else{
+                    viewSentences = sortedSentences;
+                }
+                renderHome(res, data._id, viewSentences, data.title, count);
             });
-            var viewSentences;
-			if(sortedSentences && sortedSentences.length > sentenceHomeCount){
-				viewSentences = sortedSentences.splice(sortedSentences.length - sentenceHomeCount, sortedSentences.length);
-			}else{
-                viewSentences = sortedSentences;
-			}
-            renderHome(res, data._id, viewSentences, data.title);
+			
         }
     }, req.connection.remoteAddress);
 };
@@ -33,9 +44,11 @@ exports.PostHome = function(req, res){
         });
 };
 
-var renderHome = function(res, objectId, firstSentences, title){
+var renderHome = function(res, objectId, firstSentences, title, endCount){
+    console.log(endCount);
+    console.log(endCount === 0);
     res.render('../Views/Home/index.ejs', {
-        locals: { objectId : objectId, sentences : firstSentences, title: title }
+        locals: { objectId : objectId, sentences : firstSentences, title: title, end: (endCount === 0) }
     });
 };
 
@@ -51,19 +64,35 @@ var saveOrUpdateStory = function(err, story, req, res){
             story.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
         }
 		if(req.body.submit != "Submit"){
-			story.ended = true;
-			story.endeddate = new Date();
+            var now = new Date();
+            var minutes = 20;
+            var before = new Date(now.getTime() - minutes*60000);
+            models.Story
+            .count()
+            .where('endedip').equals(ip)
+            .where('endeddate').gte(before)
+            .exec(function(err, count){
+                if(count === 0){
+                    story.ended = true;
+                    story.endeddate = new Date();
+                    story.endedip = ip;
+                }
+                story.sentencecount++;
+                story.save();
+                res.redirect('/Story?id=' + id);
+            });
+		}else{
+            story.sentencecount++;
+            story.save();
+            res.redirect('/Story?id=' + id);
 		}
-        story.sentencecount++;
-        story.save();
-		res.redirect('/Story?id=' + id);
     }
     else{
 		var newStory = new models.Story();
 		newStory.setup();
 		newStory.title = req.body.title;
 		newStory.intialteller = req.connection.remoteAddress;
-		newStory.sentences.push({text: req.body.sentence, ip : ip, order : story.sentencecount});
+		newStory.sentences.push({text: req.body.sentence, ip : ip, order : 0});
 		newStory.sentencecount++;
 		newStory.save(function(err, data){
 			id = data._id;
