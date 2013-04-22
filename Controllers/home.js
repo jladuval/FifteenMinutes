@@ -12,13 +12,13 @@ exports.GetHome = function(req, res){
             var ip = null;
             var forwardedIpsStr = req.headers['x-forwarded-for'];
             if (forwardedIpsStr) {
-                ip = forwardedIpsStr[0];
+                ip = forwardedIpsStr;
             }
             if (!ip) {
                 ip = req.connection.remoteAddress;
             }
             var now = new Date();
-            var minutes = 15;
+            var minutes = 40;
             var before = new Date(now.getTime() - minutes*60000);
             models.Story
             .count()
@@ -91,7 +91,7 @@ var saveOrUpdateStory = function(err, story, req, res){
         }
 		if(req.body.submit != "Submit"){
             var now = new Date();
-            var minutes = 15;
+            var minutes = 40;
             var before = new Date(now.getTime() - minutes*60000);
             models.Story
             .count()
