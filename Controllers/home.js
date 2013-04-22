@@ -9,7 +9,7 @@ exports.GetHome = function(req, res){
 			renderHome(res, null, null, null, 0);
         }
         else{
-            var ip = req.headers['X-Forwarded-For'];
+            var ip = getClientIp(req);
             var now = new Date();
             var minutes = 40;
             var before = new Date(now.getTime() - minutes*60000);
@@ -35,6 +35,18 @@ exports.GetHome = function(req, res){
     }, req.connection.remoteAddress);
 };
 
+var getClientIp = function(req) {
+  var ipAddress = null;
+  var forwardedIpsStr = req.headers['x-forwarded-for'];
+  if (forwardedIpsStr) {
+    ipAddress = forwardedIpsStr[0];
+  }
+  if (!ipAddress) {
+    ipAddress = req.connection.remoteAddress;
+  }
+  return ipAddress;
+};
+
 exports.PostHome = function(req, res){
     var id = new ObjectId(req.body.objectId);
     models.Story.findOne()
@@ -54,7 +66,7 @@ var renderHome = function(res, objectId, firstSentences, title, endCount){
 
 var saveOrUpdateStory = function(err, story, req, res){
     var id = new ObjectId(req.body.objectId);
-    var ip = req.headers['X-Forwarded-For'];
+    var ip = getClientIp(req);
     if(story){
         if(story.sentencecount === 0 && req.body.title !== null){
             story.title = req.body.title;
