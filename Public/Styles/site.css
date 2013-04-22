@@ -20,7 +20,7 @@ body{
 .sentence-input {
 	width: 500px;
 	padding: 20px !important;
-	font-size: 1.8em !important;
+	font-size: 1.4em !important;
 }
 
 .story-input::-webkit-input-placeholder {
