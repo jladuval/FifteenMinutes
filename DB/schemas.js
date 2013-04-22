@@ -20,9 +20,18 @@ var story =
       random: Number //  Yes, this is horrible. MongoDB is a little silly in this regard. See here http://cookbook.mongodb.org/patterns/random-attribute/ 
     });
 
+var bannedUser =  
+    new Schema({
+      id: { type: Number, index: true },
+      ip: String,
+      reason: String
+    });
+
+
 story.methods.setup = function(){
     this.random = Math.round(Math.random() * 10000000);
 };
 
 exports.Story = story;
+exports.BannedUser = bannedUser;
     

@@ -3,13 +3,46 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 var sentenceHomeCount = 2;
 
-exports.GetHome = function(req, res){    
-    getRandomStory(function(err, data){
-        if(data === null){                
-			renderHome(res, null, null, null, 0);
-        }
-        else{
-            var ip = null;
+exports.GetHome = function(req, res){
+    checkBan(req, res, function(ip){
+            models.BannedUser.count().where('ip').equals(ip).exec(function(error, bannedUserCount){
+            if(bannedUserCount !== 0){
+                res.redirect('http://google.com');
+            }else{
+                getRandomStory(function(err, data){
+                    if(data === null){                
+                        renderHome(res, null, null, null, 0);
+                    }
+                    else{            
+                        var now = new Date();
+                        var minutes = 40;
+                        var before = new Date(now.getTime() - minutes*60000);
+                        models.Story
+                        .count()
+                        .where('endedip').equals(ip)
+                        .where('endeddate').gte(before)
+                        .exec(function(err, count){
+                            var sentences = data.sentences;
+                            var sortedSentences = sentences.sort(function(a, b){
+                                return a.order-b.order;
+                            });
+                            var viewSentences;
+                            if(sortedSentences && sortedSentences.length > sentenceHomeCount){
+                                viewSentences = sortedSentences.splice(sortedSentences.length - sentenceHomeCount, sortedSentences.length);
+                            }else{
+                                viewSentences = sortedSentences;
+                            }
+                            renderHome(res, data._id, viewSentences, data.title, count);
+                        });
+                    }
+                }, req.connection.remoteAddress);
+            }
+        });
+    });   
+};
+
+var checkBan = function(req, res, callback){
+    var ip = null;
             var forwardedIpsStr = req.headers['x-forwarded-for'];
             if (forwardedIpsStr) {
                 ip = forwardedIpsStr;
@@ -17,55 +50,28 @@ exports.GetHome = function(req, res){
             if (!ip) {
                 ip = req.connection.remoteAddress;
             }
-            var now = new Date();
-            var minutes = 40;
-            var before = new Date(now.getTime() - minutes*60000);
-            models.Story
-            .count()
-            .where('endedip').equals(ip)
-            .where('endeddate').gte(before)
-            .exec(function(err, count){
-                var sentences = data.sentences;
-                var sortedSentences = sentences.sort(function(a, b){
-                    return a.order-b.order;
-                });
-                var viewSentences;
-                if(sortedSentences && sortedSentences.length > sentenceHomeCount){
-                    viewSentences = sortedSentences.splice(sortedSentences.length - sentenceHomeCount, sortedSentences.length);
-                }else{
-                    viewSentences = sortedSentences;
-                }
-                renderHome(res, data._id, viewSentences, data.title, count);
-            });
-			
+    models.BannedUser.count().where('ip').equals(ip).exec(function(error, bannedUserCount){
+        if(bannedUserCount !== 0){
+            res.redirect('http://lmgtfy.com/?q=Why+can%27t+we+have+nice+things%3F');
+        }else{
+            callback(ip);
         }
-    }, req.connection.remoteAddress);
-};
-
-var getClientIp = function(req) {
-  var ipAddress = null;
-  var forwardedIpsStr = req.headers['x-forwarded-for'];
-  if (forwardedIpsStr) {
-    ipAddress = forwardedIpsStr[0];
-  }
-  if (!ipAddress) {
-    ipAddress = req.connection.remoteAddress;
-  }
-  return ipAddress;
+    });
 };
 
 exports.PostHome = function(req, res){
-    var id = new ObjectId(req.body.objectId);
-    models.Story.findOne()
+    checkBan(req, res, function(ip){
+        var id = new ObjectId(req.body.objectId);
+        models.Story.findOne()
         .where('_id').equals(id)
         .exec(function(err, story){               
-			saveOrUpdateStory(err, story, req, res);
+            saveOrUpdateStory(err, story, req, res);
         });
+    });
+    
 };
 
 var renderHome = function(res, objectId, firstSentences, title, endCount){
-    console.log(endCount);
-    console.log(endCount === 0);
     res.render('../Views/Home/index.ejs', {
         locals: { objectId : objectId, sentences : firstSentences, title: title, end: (endCount === 0) }
     });
@@ -76,7 +82,7 @@ var saveOrUpdateStory = function(err, story, req, res){
     var ip = null;
     var forwardedIpsStr = req.headers['x-forwarded-for'];
     if (forwardedIpsStr) {
-        ip = forwardedIpsStr[0];
+        ip = forwardedIpsStr;
     }
     if (!ip) {
         ip = req.connection.remoteAddress;
@@ -117,7 +123,7 @@ var saveOrUpdateStory = function(err, story, req, res){
 		var newStory = new models.Story();
 		newStory.setup();
 		newStory.title = req.body.title;
-		newStory.intialteller = req.connection.remoteAddress;
+		newStory.intialteller = ip;
 		newStory.sentences.push({text: req.body.sentence, ip : ip, order : 0});
 		newStory.sentencecount++;
 		newStory.save(function(err, data){
