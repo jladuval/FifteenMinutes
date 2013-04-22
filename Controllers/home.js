@@ -139,7 +139,7 @@ var getRandomStory = function(callback, ip){
 	}else{
 		var story = models.Story;
         var now = new Date();
-        var seconds = 40;
+        var seconds = 60;
         var before = new Date(now.getTime() - seconds*1000);
 		story
 			.count()
