@@ -4,71 +4,50 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var sentenceHomeCount = 2;
 
 exports.GetHome = function(req, res){
-    checkBan(req, res, function(ip){
-            models.BannedUser.count().where('ip').equals(ip).exec(function(error, bannedUserCount){
-            if(bannedUserCount !== 0){
-                res.redirect('http://google.com');
-            }else{
-                getRandomStory(function(err, data){
-                    if(data === null){                
-                        renderHome(res, null, null, null, 0);
-                    }
-                    else{            
-                        var now = new Date();
-                        var minutes = 40;
-                        var before = new Date(now.getTime() - minutes*60000);
-                        models.Story
-                        .count()
-                        .where('endedip').equals(ip)
-                        .where('endeddate').gte(before)
-                        .exec(function(err, count){
-                            var sentences = data.sentences;
-                            var sortedSentences = sentences.sort(function(a, b){
-                                return a.order-b.order;
-                            });
-                            var viewSentences;
-                            if(sortedSentences && sortedSentences.length > sentenceHomeCount){
-                                viewSentences = sortedSentences.splice(sortedSentences.length - sentenceHomeCount, sortedSentences.length);
-                            }else{
-                                viewSentences = sortedSentences;
-                            }
-                            renderHome(res, data._id, viewSentences, data.title, count);
-                        });
-                    }
-                }, req.connection.remoteAddress);
-            }
-        });
-    });   
-};
-
-var checkBan = function(req, res, callback){
-    var ip = null;
-            var forwardedIpsStr = req.headers['x-forwarded-for'];
-            if (forwardedIpsStr) {
-                ip = forwardedIpsStr;
-            }
-            if (!ip) {
-                ip = req.connection.remoteAddress;
-            }
-    models.BannedUser.count().where('ip').equals(ip).exec(function(error, bannedUserCount){
-        if(bannedUserCount !== 0){
-            res.redirect('http://lmgtfy.com/?q=Why+can%27t+we+have+nice+things%3F');
-        }else{
-            callback(ip);
+var ip = null;
+        var forwardedIpsStr = req.headers['x-forwarded-for'];
+        if (forwardedIpsStr) {
+            ip = forwardedIpsStr;
         }
-    });
+        if (!ip) {
+            ip = req.connection.remoteAddress;
+        }
+ getRandomStory(function(err, data){
+        if(data === null){                
+            renderHome(res, null, null, null, 0);
+        }
+        else{            
+            var now = new Date();
+            var minutes = 40;
+            var before = new Date(now.getTime() - minutes*60000);
+            models.Story
+            .count()
+            .where('endedip').equals(ip)
+            .where('endeddate').gte(before)
+            .exec(function(err, count){
+                var sentences = data.sentences;
+                var sortedSentences = sentences.sort(function(a, b){
+                    return a.order-b.order;
+                });
+                var viewSentences;
+                if(sortedSentences && sortedSentences.length > sentenceHomeCount){
+                    viewSentences = sortedSentences.splice(sortedSentences.length - sentenceHomeCount, sortedSentences.length);
+                }else{
+                    viewSentences = sortedSentences;
+                }
+                renderHome(res, data._id, viewSentences, data.title, count);
+            });
+        }
+    }, req.connection.remoteAddress);
 };
 
 exports.PostHome = function(req, res){
-    checkBan(req, res, function(ip){
-        var id = new ObjectId(req.body.objectId);
-        models.Story.findOne()
-        .where('_id').equals(id)
-        .exec(function(err, story){               
-            saveOrUpdateStory(err, story, req, res);
-        });
-    });
-    
+    var id = new ObjectId(req.body.objectId);
+    models.Story.findOne()
+    .where('_id').equals(id)
+    .exec(function(err, story){               
+        saveOrUpdateStory(err, story, req, res);
+    });    
 };
 
 var renderHome = function(res, objectId, firstSentences, title, endCount){
