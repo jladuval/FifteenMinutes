@@ -1,8 +1,9 @@
 var express = require('express');
 var engine = require('ejs-locals');
 var mongoose = require('mongoose');
+var conf = require('./conf');
 
-mongoose.connect('mongodb://mongo_jacob:Horsecruncher@widmore.mongohq.com:10000/fifteenmins');
+mongoose.connect(conf.DB);
 
 var server = express();
 

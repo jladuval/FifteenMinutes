@@ -13,3 +13,7 @@ logs
 results
 
 npm-debug.log
+.sublime-project
+.sublime-workspace
+sublimeproj.sublime-project
+sublimeproj.sublime-workspace

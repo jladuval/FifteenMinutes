@@ -1,0 +1,1 @@
+exports.DB = process.env.DB;
