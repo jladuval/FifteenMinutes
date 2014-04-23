@@ -17,3 +17,4 @@ npm-debug.log
 .sublime-workspace
 sublimeproj.sublime-project
 sublimeproj.sublime-workspace
+node_modules
