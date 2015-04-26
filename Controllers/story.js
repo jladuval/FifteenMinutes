@@ -10,10 +10,10 @@ exports.GetIndex = function(req, res){
 			.where('_id').equals(id)
 			.exec(function(err, data){
 				if(story !== null){
-                    renderStory(res, data.sentences, data.title);
+					renderStory(res, data.sentences, data.title);
 				}
 				else{
-					res.redirect('/' + err);
+					res.redirect('/');
 				}
 			});
 	} else {
